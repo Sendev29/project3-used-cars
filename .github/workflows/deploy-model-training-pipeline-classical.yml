@@ -9,6 +9,13 @@ on:
     branches:
       - main
 jobs:
+  setup-az-ml-extension:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clear Azure CLI extension cache
+        run: |
+          rm -rf ~/.azure/azureml-cli-extensions/*
+          az extension add --name ml --yes --upgrade
   get-config:
     uses: Azure/mlops-templates/.github/workflows/read-yaml.yml@main
     with:
