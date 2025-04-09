@@ -9,19 +9,12 @@ on:
     branches:
       - main
 jobs:
-  setup-az-ml-extension:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Clear Azure CLI extension cache
-        run: |
-          rm -rf ~/.azure/azureml-cli-extensions/*
-          az extension add --name ml --yes --upgrade
-  get-config:
+   get-config:
     uses: Azure/mlops-templates/.github/workflows/read-yaml.yml@main
     with:
       file_name: config-infra-prod.yml
 
-  create-compute:
+   create-compute:
     needs: get-config
     uses: Azure/mlops-templates/.github/workflows/create-compute.yml@main
     with:
@@ -36,7 +29,7 @@ jobs:
     secrets:
       creds: ${{secrets.AZURE_CREDENTIALS}}
         
-  register-dataset:
+   register-dataset:
     needs: get-config
     uses: Azure/mlops-templates/.github/workflows/register-dataset.yml@main
     with:
@@ -47,7 +40,7 @@ jobs:
     secrets:
       creds: ${{secrets.AZURE_CREDENTIALS}}
   
-  register-environment:
+   register-environment:
     needs: get-config
     uses: Azure/mlops-templates/.github/workflows/register-environment.yml@main
     with:
@@ -58,7 +51,7 @@ jobs:
     secrets:
       creds: ${{secrets.AZURE_CREDENTIALS}}
       
-  run-pipeline:
+   run-pipeline:
     needs: [get-config, register-environment, create-compute, register-dataset]
     uses: Azure/mlops-templates/.github/workflows/run-pipeline.yml@main
     with:
